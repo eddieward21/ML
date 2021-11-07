@@ -1,0 +1,28 @@
+import requests
+import re
+import pandas as pd 
+from bs4 import BeautifulSoup
+
+def jobGetter(skill, state):
+
+    url = "https://www.indeed.com/jobs?q={skill}&l={state}&vjk=b80122ef48cfa47d".format(skill = skill, state = state)
+    data = requests.get(url)
+    soup =  BeautifulSoup(data.text, 'html.parser')
+
+    jobs = soup.find_all('div', attrs = {'class': 'slider_container'})
+    for job in jobs:
+        company = job.find('span', class_ = 'companyName').text.strip()
+        location = job.find('div', class_ = 'companyLocation').text.strip()
+        date = job.find('span', class_ = 'date').text.strip()
+        descr = job.find('div', class_ = 'job-snippet').li.text.strip()
+        #salary = job.find('div', class_= 'attribute_snippet').text.strip()
+        job_title = div.find('h2', class_= 'jobTitle jobTitle-color-purple jobTitle-newJob').text.strip()
+        print(f"""
+        Company Name: {company}
+        Company Location: {location}
+        Date Active: {date}
+        Job Description: {descr}
+        Pay: {salary}
+        Job Title: {job_title}
+        """)
+jobGetter("Django", "Michigan")
